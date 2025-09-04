@@ -91,11 +91,6 @@ DATABASES = {
         default=os.environ.get('DATABASE_URL'),
         conn_max_age=600,
         engine='django.db.backends.postgresql',
-        host='containers-us-west-49.railway.app',
-        port='6371',
-        user='postgres',
-        password='oTcUJmUaItYjlxVtyEGioSfdBvMTqjAv',
-        database='railway'
         
     )
 }
