@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-e_ky#1(#exw1+&0714z1c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ['ecom-1-production-59cf.up.railway.app', 'https://ecom-1-production-59cf.up.railway.app'] # Allows all hosts in production
+ALLOWED_HOSTS = ['ecom-1-production-59cf.up.railway.app'] # Allows all hosts in production
 CSRF_TRUSTED_ORIGINS = ['https://ecom-1-production-59cf.up.railway.app']
 
 
