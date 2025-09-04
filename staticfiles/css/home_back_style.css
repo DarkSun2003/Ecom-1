@@ -1,0 +1,7 @@
+/* home_back_style.css */
+
+
+.dark-sun-header {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/static/img/dark_sun_bg.jpg');
+    /* Other styles... */
+}

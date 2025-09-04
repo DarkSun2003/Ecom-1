@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<header class="dark-sun-header py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Categories</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Choose your category below</p>
+        </div>
+    </div>
+</header>
+
+{% load static %}
+            <link rel="stylesheet" href="{% static 'css/home_back_style.css' %}">
+
+<div class="container my-5">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+        {% for category in categories %}
+        <div class="col">
+            <a href="{% url 'category' category %}" class="category-link">
+                <div class="card h-100 category-card-dark">
+                    <div class="card-body d-flex align-items-center justify-content-center">
+                        <h2 class="card-title text-center text-white fw-bolder">{{ category }}</h2>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<style>
+    /* Custom header styling for consistency */
+    .bg-dark-sun {
+        background: linear-gradient(to right, #2c3e50, #0a0a0a);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Style for the category cards */
+    .category-card-dark {
+        background-color: #2a2a2a;
+        border: 1px solid #444;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    /* Hover effect for a "cool" feel */
+    .category-card-dark:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+        background-color: #383838;
+    }
+
+    /* Styles for the link and card title */
+    .category-link {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .category-card-dark .card-title {
+        color: #ff6b6b; /* Use a fiery color for the text */
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        font-size: 1.5rem;
+    }
+
+    /* Ensure the body background is dark */
+    body {
+        background-color: #121212;
+        color: #f8f9fa;
+    }
+</style>
+{% endblock %}

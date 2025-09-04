@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="bg-body-wrapper">
+    <header class="dark-sun-header py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Checkout</h1>
+                <p class="lead fw-normal text-white-50 mb-0">Review Your Order</p>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form method="POST" action="{% url 'billing_info' %}">
+                    {% csrf_token %}
+
+                   
+                    <div class="card dark-card mb-4">
+                        <div class="card-header bg-dark-header text-white-50">
+                            Order Summary
+                        </div>
+                        <div class="card-body">
+                            {% for product in cart_products %}
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <h6 class="mb-0">{{ product.name }}</h6>
+                                    <small class="text-muted">
+                                        Quantity:
+                                        {% for key, value in quantities.items %}
+                                            {% if key == product.id|slugify %}
+                                                {{ value }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </small>
+                                </div>
+                                <div>
+                                    {% if product.is_sale %}
+                                    <span class="text-success fw-bold">₦{{ product.sale_price }}</span>
+                                    {% else %}
+                                    <span class="text-white-50">₦{{ product.price }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <hr class="my-2 text-white-50">
+                            {% endfor %}
+                            <div class="d-flex justify-content-between align-items-center fw-bold mt-4">
+                                <span>Total:</span>
+                                <span>₦{{ totals }}</span>
+                            </div>
+                            <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-success mt-3">Update Items</a>
+                        </div>
+                    </div>
+                    <div class="card dark-card mb-4">
+                        <div class="card-header bg-dark-header text-white-50">
+                            Shipping Info
+                        </div>
+                        <div class="card-body">
+                            {% for field in shipping_form %}
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="{{ field.id_for_label }}">
+                                    {{ field.label|default:field.name|capfirst|cut:"_" }}:
+                                </label>
+                                {{ field }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-lg btn-success">
+                            Continue to Billing
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+/* Custom Coolify Styles */
+.bg-body-wrapper {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/static/img/dark_sun_bg.jpg');
+
+}
+.dark-card {
+    background-color: #212121;
+    color: #e0e0e0;
+    border: 1px solid #424242;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+.bg-dark-header {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/static/img/dark_sun_bg.jpg');
+}
+.form-label {
+    color: #ff6b6b !important;
+    font-weight: bold;
+}
+.form-control, .form-select {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #f8f9fa;
+}
+.form-control:focus, .form-select:focus {
+    background-color: #444;
+    border-color: #ff6b6b;
+    box-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+}
+</style>
+{% endblock %}

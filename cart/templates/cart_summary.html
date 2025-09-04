@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% block content %}
+    <header class="dark-sun-header py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Shopping Cart</h1>
+                <p class="lead fw-normal text-white-50 mb-0">View your cart...</p>
+            </div>
+        </div>
+    </header>
+    {% load static %}
+            <link rel="stylesheet" href="{% static 'css/home_back_style.css' %}">
+            
+    <div class="container my-5">
+        {% if cart_products %}
+            {% for product in cart_products %}
+                <div class="card mb-3 product-card-dark">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="{{ product.name }}">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body d-flex flex-column h-100">
+                                <h5 class="card-title text-center fw-bolder">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description }}</p>
+
+                                {% if product.is_sale %}
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <i class="bi-star-fill"></i>
+                                    &nbsp;&nbsp;Sale!&nbsp;&nbsp;
+                                    <i class="bi-star-fill"></i>
+                                </div>
+                                <p class="card-text text-center my-2">
+                                    <span class="text-muted text-decoration-line-through">₦{{ product.price }}</span>
+                                    <span class="fs-5 fw-bold ms-2 text-danger">₦{{ product.sale_price }}</span>
+                                </p>
+                                {% else %}
+                                <p class="card-text text-center my-2 fs-5 fw-bold text-light">₦{{ product.price }}</p>
+                                {% endif %}
+
+                                <div class="mt-auto pt-3">
+                                    <div class="row align-items-center mb-3">
+                                        <div class="col-md-4">Quantity:</div>
+                                        <div class="col-md-4">
+                                            <select class="form-select" id="select{{ product.id }}">
+                                                {% for key, value in quantities.items %}
+                                                    {% if key == product.id|slugify %}
+                                                        <option value="{{ value }}" selected>{{ value }}</option>
+                                                        {% for i in "12345"|make_list %}
+                                                            {% if i|slugify != value|slugify %}
+                                                                <option value="{{ i }}">{{ i }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                        <a href="{% url 'home' %}" class="btn btn-outline-light">Back to Home</a>
+                                        <button type="button" data-index="{{ product.id }}" class="btn btn-primary update-cart">Update Cart</button>
+                                        <button type="button" data-index="{{ product.id }}" class="btn btn-danger delete-product">Remove from Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <h3 class="mt-5 text-center text-light">Total: ₦{{ totals }} </h3>
+            <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
+            
+        {% else %}
+        <div class="alert alert-danger text-center my-5" role="alert">
+            There is nothing in your cart...
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        //update cart
+        // Check if button pressed
+        $(document).on('click', '.update-cart', function(e){
+            e.preventDefault();
+            // get the product id
+            var productid = $(this).data('index');
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'cart_update' %}',
+                data: {
+                    product_id: $(this).data('index'),
+                    product_qty: $('#select' + productid + ' option:selected').val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    action: 'post'
+                },
+
+                success: function(json){
+                    //console.log(json)
+                    //document.getElementById("Cart_quantity").textContent = json.qty
+                    location.reload();
+                },
+
+                error: function(xhr, errmsg, err){}
+            });
+        })
+
+    </script>
+
+    <script>
+        //delete product from cart
+        // Check if button pressed
+        $(document).on('click', '.delete-product', function(e){
+            e.preventDefault();
+            // get the product id
+            //var productid = $(this).data('index');
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'cart_delete' %}',
+                data: {
+                    product_id: $(this).data('index'),
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    action: 'post'
+                },
+
+                success: function(json){
+                    //console.log(json)
+                    //document.getElementById("Cart_quantity").textContent = json.qty
+                    location.reload();
+                },
+
+                error: function(xhr, errmsg, err){}
+            });
+        })
+
+    </script>
+  <style>
+    /* Style for the product card */
+    .product-card-dark {
+        background-color: #212121;
+        color: #e0e0e0;
+        border: 1px solid #424242;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Style for text in the card body */
+    .product-card-dark .card-title {
+        color: #ff6b6b; /* Use a fiery color for the title */
+        text-shadow: 1px 1px 2px #000;
+    }
+
+    .product-card-dark .card-text {
+        color: #bdbdbd;
+    }
+
+    /* Update button colors for the dark theme */
+    .btn-outline-light {
+        border-color: #e0e0e0;
+        color: #e0e0e0;
+    }
+
+    .btn-outline-light:hover {
+        background-color: #e0e0e0;
+        color: #212121;
+    }
+
+    .btn-primary {
+        background-color: #6a1b9a;
+        border-color: #6a1b9a;
+    }
+    .btn-primary:hover {
+        background-color: #4a148c;
+        border-color: #4a148c;
+    }
+
+    .btn-danger {
+        background-color: #d32f2f;
+        border-color: #d32f2f;
+    }
+    .btn-danger:hover {
+        background-color: #b71c1c;
+        border-color: #b71c1c;
+    }
+
+    /* Ensure the body background is dark */
+    body {
+        background-color: #121212;
+    }
+  </style>
+{% endblock %}

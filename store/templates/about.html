@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<header class="dark-sun-header py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">About DarkSun</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Learn about our mission and vision</p>
+        </div>
+    </div>
+</header>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card product-card-dark p-4">
+                <p class="card-text text-justify">
+                    DarkSun E-commerce is your all-in-one online marketplace for everything you need to live, work, and thrive. From electronics to fashion, home essentials to health products, gadgets to groceries, DarkSun brings you a curated collection of quality items at competitive prices.
+                </p>
+                <p class="card-text text-justify">
+                    We're dedicated to making shopping simple, secure, and enjoyable for everyone. Whether you're upgrading your tech, refreshing your wardrobe, or stocking up on daily needs, DarkSun is here to deliver convenience, variety, and value—all at your fingertips.
+                </p>
+                <p class="card-text text-justify">
+                    Join thousands of satisfied customers who trust DarkSun for fast delivery, reliable service, and a seamless shopping experience.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+ {% load static %}
+            <link rel="stylesheet" href="{% static 'css/home_back_style.css' %}">
+
+<style>
+/* Reusing the dark card style from other pages */
+.product-card-dark {
+    background-color: #212121;
+    color: #e0e0e0;
+    border: 1px solid #424242;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.product-card-dark .card-text {
+    color: #bdbdbd; /* Light grey text for readability */
+    line-height: 1.6; /* Improve line spacing */
+}
+
+/* Ensure the body background is dark */
+body {
+    background-color: #121212;
+}
+</style>
+
+{% endblock %}

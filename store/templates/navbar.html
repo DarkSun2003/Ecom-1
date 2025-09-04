@@ -1,0 +1,80 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark-sun">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <i class="bi bi-fire me-2"></i>
+            DarkSun E-commerce
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'search' %}">Search</a></li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'update_user' %}">User Profile</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="{% url 'update_info' %}">User Info</a></li>
+                        </ul>
+                    </li>
+                    {% if user.is_superuser%}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Orders</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'shipped_dash' %}">Shipped Orders</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="{% url 'not_shipped_dash' %}">Unshipped Orders</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                {% endif %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'category_summary' %}">All Products</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        {% for category in categories %}
+                        <li><a class="dropdown-item" href="{% url 'category' category.name %}">{{ category.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <a href="{% url 'cart_summary' %}"class="btn btn-outline-light"><i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-light text-dark ms-1 rounded-pill" id="Cart_quantity">{{ cart|length }}</span>
+                </a>
+            </form>
+        </div>
+    </div>
+</nav>
+<style>
+/* Style for the dark theme navbar */
+.bg-dark-sun {
+    /* Use a dark gradient background */
+    background: linear-gradient(to right, #2c3e50, #0a0a0a);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */
+}
+
+/* Style for the dropdown menu */
+.navbar .dropdown-menu {
+    background-color: #212529; /* A dark color for the dropdown */
+    border: 1px solid #444; /* Darker border */
+}
+
+/* Style for dropdown links to make them stand out on hover */
+.navbar .dropdown-item {
+    color: #f8f9fa; /* Light text color */
+}
+
+.navbar .dropdown-item:hover {
+    background-color: #343a40; /* Lighter background on hover */
+    color: #ff6b6b; /* Highlight color on hover */
+}
+</style>

@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<header class="dark-sun-header py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Search</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Search for Products</p>
+        </div>
+    </div>
+</header>
+
+{% load static %}
+            <link rel="stylesheet" href="{% static 'css/home_back_style.css' %}">
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card product-card-dark p-4">
+                <div class="card-header border-0 bg-transparent">
+                    <h5 class="text-light fw-bold">Search Products</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'search' %}">
+                        {% csrf_token %}
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control form-control-dark" placeholder="Search For Products" name="searched" value="{{ searched_term }}">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </form>
+
+                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                        {% if searched_products %}
+                            {% for product in searched_products %}
+                                <div class="col mb-5">
+                                    <div class="card h-100 product-card-dark">
+                                        {% if product.is_sale %}
+                                            <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                                        {% endif %}
+                                        <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
+                                        <div class="card-body p-4">
+                                            <div class="text-center">
+                                                <h5 class="fw-bolder">{{ product.name }}</h5>
+                                                {% if product.is_sale %}
+                                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                                        <div class="bi-star-fill"></div>
+                                                        &nbsp;&nbsp;Sale!&nbsp;&nbsp;
+                                                        <div class="bi-star-fill"></div>
+                                                    </div>
+                                                    <strike class="text-muted">₦{{ product.price }}</strike>
+                                                    &nbsp;
+                                                    <span class="fs-5 fw-bold text-danger">₦{{ product.sale_price }}</span>
+                                                {% else %}
+                                                    <span class="fs-5 fw-bold text-light">₦{{ product.price }}</span>
+                                                {% endif %}
+                                                <p class="text-muted mt-2">{{ product.description|truncatewords:5 }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                            <div class="text-center">
+                                                <a class="btn btn-outline-light mt-auto" href="{% url 'product' product.id %}">View Product</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-light text-center">No products found for your search.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Custom style for the search input field */
+.form-control-dark {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #f8f9fa;
+}
+
+.form-control-dark:focus {
+    background-color: #444;
+    border-color: #ff6b6b;
+    box-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+}
+
+/* Reusing the dark card style */
+.product-card-dark {
+    background-color: #212121;
+    color: #e0e0e0;
+    border: 1px solid #424242;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.product-card-dark .card-text {
+    color: #bdbdbd;
+    line-height: 1.6;
+}
+
+/* Style for the buttons */
+.btn-primary {
+    background-color: #6a1b9a;
+    border-color: #6a1b9a;
+}
+.btn-primary:hover {
+    background-color: #4a148c;
+    border-color: #4a148c;
+}
+
+.btn-outline-light {
+    border-color: #e0e0e0;
+    color: #e0e0e0;
+}
+.btn-outline-light:hover {
+    background-color: #e0e0e0;
+    color: #212121;
+}
+
+/* Ensure the body background is dark */
+body {
+    background-color: #121212;
+}
+</style>
+
+{% endblock %}
