@@ -27,7 +27,7 @@ load_dotenv()
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-e_ky#1(#exw1+&0714z1c4z-b@fwurwe9*6)r%p!n@u7l$s3w6')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+DEBUG = True
 
 ALLOWED_HOSTS = ['ecom-1-production-59cf.up.railway.app'] # Allows all hosts in production
 CSRF_TRUSTED_ORIGINS = ['https://ecom-1-production-59cf.up.railway.app']
@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'store',
     'payment',
     'whitenoise.runserver_nostatic',  # For serving static files in production
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -133,6 +135,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Cloudinary config
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dd8wup4iv',
+    'API_KEY': '218371777645134',
+    'API_SECRET': 'QF8R-YO2BxU7sgziLAS1Bq-pBz8',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 # Default primary key field type
