@@ -14,22 +14,6 @@ from dotenv import load_dotenv
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-"""
-Django settings for ecom project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.2/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/5.2/ref/settings/
-"""
-
-from pathlib import Path
-import os
-from dotenv import load_dotenv
-import dj_database_url
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables
@@ -37,10 +21,16 @@ load_dotenv()
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-secret-key')
 
+# Set DEBUG from environment variable
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['ecom-1-production-59cf.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ['https://ecom-1-production-59cf.up.railway.app']
+# Dynamically set ALLOWED_HOSTS for development and production
+if DEBUG:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    CSRF_TRUSTED_ORIGINS = []
+else:
+    ALLOWED_HOSTS = ['ecom-1-production-59cf.up.railway.app']
+    CSRF_TRUSTED_ORIGINS = ['https://ecom-1-production-59cf.up.railway.app']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -107,21 +97,23 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
+# Static files for development and production
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Media (Cloudinary)
+# Media files for development and production
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
-}
+# Cloudinary settings only for production
+if not DEBUG:
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+        'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+    }
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
