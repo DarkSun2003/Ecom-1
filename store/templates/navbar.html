@@ -9,6 +9,7 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                <!-- The search form should be here -->
                 <li class="nav-item"><a class="nav-link" href="{% url 'search' %}">Search</a></li>
                 {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
@@ -45,12 +46,13 @@
                     </ul>
                 </li>
             </ul>
-            <form class="d-flex">
-                <a href="{% url 'cart_summary' %}"class="btn btn-outline-light"><i class="bi-cart-fill me-1"></i>
+            <div class="d-flex">
+                <a href="{% url 'cart_summary' %}"class="btn btn-outline-light">
+                    <i class="bi-cart-fill me-1"></i>
                     Cart
                     <span class="badge bg-light text-dark ms-1 rounded-pill" id="Cart_quantity">{{ cart|length }}</span>
                 </a>
-            </form>
+            </div>
         </div>
     </div>
 </nav>
