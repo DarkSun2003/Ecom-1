@@ -22,7 +22,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-secret-key')
 # Set DEBUG from environment variable for production
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# --- CHANGE MADE HERE ---
 # Dynamically set ALLOWED_HOSTS and CSRF_TRUSTED_ORIGINS
 if DEBUG:
     ALLOWED_HOSTS = ['*']
@@ -81,12 +80,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecom.wsgi.application'
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
-        conn_max_age=600,
-    )
-}
+# --- CHANGE MADE HERE ---
+# Use SQLite for development and PostgreSQL for production
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.environ.get('DATABASE_URL'),
+            conn_max_age=600,
+        )
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -121,5 +130,6 @@ else:
         'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
     }
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
