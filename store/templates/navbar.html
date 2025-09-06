@@ -9,8 +9,14 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                
                 <!-- The search form should be here -->
-                <li class="nav-item"><a class="nav-link" href="{% url 'search' %}">Search</a></li>
+                <form class="d-flex" method="POST" action="{% url 'search' %}">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search" name="searched">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+                
                 {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
