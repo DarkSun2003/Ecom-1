@@ -16,9 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import settings
+from django.conf import settings
 from django.conf.urls.static import static
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +26,7 @@ urlpatterns = [
     path('payment/', include('payment.urls')),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# This is the new code to serve media files in development
+if settings.DEBUG:
+    print("Serving media files for development...")
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
